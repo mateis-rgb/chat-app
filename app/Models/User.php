@@ -3,14 +3,25 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
+use Multicaret\Acquaintances\Traits\CanLike;
+use Multicaret\Acquaintances\Traits\CanRate;
+use Multicaret\Acquaintances\Traits\CanFollow;
+use Multicaret\Acquaintances\Traits\CanBeLiked;
+use Multicaret\Acquaintances\Traits\CanBeRated;
+use Multicaret\Acquaintances\Traits\Friendable;
+use Multicaret\Acquaintances\Traits\CanBeFollowed;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
+    use Friendable;
+    use CanFollow, CanBeFollowed;
+    use CanLike, CanBeLiked;
+    use CanRate, CanBeRated;
 
     /**
      * The attributes that are mass assignable.
