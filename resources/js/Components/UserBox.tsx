@@ -1,6 +1,10 @@
-const UserBox = () => {
+import { UserBoxProps } from "@/types/props";
+
+const UserBox: React.FC<UserBoxProps> = ({ user }) => {
     return (
-        <div>UserBox</div>
+        <div>
+            { user.name }
+        </div>
     );
 }
 

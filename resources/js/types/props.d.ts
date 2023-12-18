@@ -6,6 +6,6 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
     };
 };
 
-export type UserBox = {
-    
+export type UserBoxProps = {
+    user: User
 }
