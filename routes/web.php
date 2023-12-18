@@ -46,6 +46,6 @@ Route::get('/friends/{id}/delete', [FriendshipController::class, 'delete']);
 Route::get('/friends/get', [FriendshipController::class, 'index']);
 Route::get('/friends/get/pending', [FriendshipController::class, 'getPendings']);
 
-Route::get("/search/profile/{name}", [SearchController::class, 'profile']);
+Route::get("/search/profile", [SearchController::class, 'profile']);
 
 require __DIR__.'/auth.php';

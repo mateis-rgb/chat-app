@@ -1,4 +1,4 @@
-import { User } from ".";
+import { User, Relation } from ".";
 
 export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
     auth: {
@@ -7,5 +7,12 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
 };
 
 export type UserBoxProps = {
-    user: User
+    user: User,
+    relation: Relation | null
+}
+
+export type SearchComponentProps = {
+    auth: {
+        user: User
+    }
 }

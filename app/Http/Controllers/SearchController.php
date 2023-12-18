@@ -4,14 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
 
-
 class SearchController extends Controller
 {
-    public function profile(string $name) {
+    public function profile() {
         $users = DB::table("users")
-            ->where("name", "like", "%$name%")
+            ->select("id", "name", "email", "email_verified_at", "created_at")
             ->get();
 
-        return response()->json([$users]);
+        $relations = DB::table("friendships")
+            ->select("id", "sender_id", "recipient_id", "status", "created_at")
+            ->get();
+
+        return response()->json([$users, $relations]);
     }
 }
