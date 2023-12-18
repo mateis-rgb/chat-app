@@ -11,10 +11,23 @@ const UserBox: React.FC<UserBoxProps> = ({ user, relation }) => {
     const [isAlreadyFollowedByCurrentUser, setIsAlreadyFollowedByCurrentUser] = useState(relation?.recipient_id === user.id);
     const [isLoading, setIsLoading] = useState(false);
 
-    const handleClick = () => {
+    const handleClick = async () => {
         setIsLoading(true);
 
-        setIsAlreadyFollowedByCurrentUser(!isAlreadyFollowedByCurrentUser);
+        if (isAlreadyFollowedByCurrentUser) {
+            const request = await fetch(isAlreadyFollowedByCurrentUser ? `/friends/${user.id}/remove` : `/friends/${user.id}/send`);
+            const response = await request.json();
+
+            console.log(response);
+
+            // if (response === true) {
+            //     setIsAlreadyFollowedByCurrentUser(!isAlreadyFollowedByCurrentUser);
+
+            //     return;
+            // }
+        }
+
+        setIsLoading(false);
     }
 
     return (
@@ -29,9 +42,12 @@ const UserBox: React.FC<UserBoxProps> = ({ user, relation }) => {
                         <span className="text-xl font-bold">
                             { user.name }
                         </span>
-                        <span>
-                            { isFollowedByUser && " - Vous suit" }
-                        </span>
+
+                        { isFollowedByUser && (
+                            <> - <span className="text-gray-500 italic">
+                                    Vous suit
+                                </span>
+                            </>) }
                     </div>
 
                     <div>

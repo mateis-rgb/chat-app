@@ -17,7 +17,7 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ auth }) => {
         setSearchInput(e.target.value);
 
         if (e.target.value.length !== 0) {
-            const request = await fetch(`/search/profile`);
+            const request = await fetch("/search/profile");
 
             const response = await request.json();
 
@@ -27,13 +27,19 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ auth }) => {
             const result: SearchResult[] = [];
 
             usersList.forEach((user: User) => {
-                if (user.name.toLowerCase().includes(e.target.value)) {
+                if (user.name.toLowerCase().includes(e.target.value) || user.email.toLowerCase().includes(e.target.value)) {
                     if (relationsList.length !== 0) {
                         relationsList.forEach((relation: Relation) => {
                             if ((user.id === relation.recipient_id && auth.user.id === relation.sender_id) || (user.id === relation.sender_id && auth.user.id === relation.recipient_id)) {
                                 result.push({
                                     user: user,
                                     relation: relation
+                                });
+                            }
+                            else {
+                                result.push({
+                                    user: user,
+                                    relation: null
                                 });
                             }
                         });

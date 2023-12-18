@@ -34,19 +34,36 @@ class FriendshipController extends Controller
                 $user->befriend($friend[0]);
 
                 return response()->json([
-                    "status" => "send"
+                    "status" => 200
                 ]);
             }
         }
 
         return response()->json([
-            "status" => "not found"
+            "status" => 404
+        ]);
+    }
+
+    public function remove(int $id) {
+        $user = User::find(auth()->user()->id);
+        $friend = User::where("id", $id)->get();
+
+        if(!$friend->isEmpty()) {
+            if ($user->id != $friend[0]->id) {
+                $user->unfriend($friend[0]);
+
+                return response()->json([
+                    "status" => 200
+                ]);
+            }
+        }
+
+        return response()->json([
+            "status" => 404
         ]);
     }
 
     public function accept(int $id) {}
 
     public function deny(int $id) {}
-
-    public function delete(int $id) {}
 }
