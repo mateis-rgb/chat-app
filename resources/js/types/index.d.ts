@@ -6,6 +6,7 @@ export interface User {
     email: string;
     email_verified_at: string;
     created_at: string;
+    status: string;
 }
 
 export interface Relation {

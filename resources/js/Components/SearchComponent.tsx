@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Relation, SearchResult, User } from "@/types";
 import { SearchComponentProps } from "@/types/props";
 
@@ -12,13 +12,39 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ auth }) => {
     const [searchResult, setSearchResult] = useState<SearchResult[]>([]);
     const [errors, setErrors] = useState("");
 
+    useEffect(() => {
+        (async () => {
+            const request = await fetch("/search/profile");
+            const response = await request.json();
+
+            const usersList: User[] = response[0];
+            const relationsList: Relation[] = response[1];
+
+            const result: SearchResult[] = [];
+
+            usersList.forEach((user: User) => {
+                if (relationsList.length !== 0) {
+                    relationsList.forEach((relation: Relation) => {
+                        if (relation.recipient_id === user.id) {
+                            result.push({
+                                user: user,
+                                relation: relation
+                            });
+                        }
+                    });
+                }
+            });
+
+            setSearchResult(result);
+        })();
+    }, []);
+
     const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
         setSearchInput(e.target.value);
 
         if (e.target.value.length !== 0) {
             const request = await fetch("/search/profile");
-
             const response = await request.json();
 
             const usersList = response[0];
@@ -79,9 +105,15 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ auth }) => {
                 <div className="mt-4 border-t-gray-200 rounded-full border-t-2"></div>
 
                 <div className="mt-4 px-1">
-                    { searchResult.map((result: SearchResult) => (
-                        <UserBox key={result.user.id} user={result.user} relation={result.relation} />
-                    )) }
+                    { searchResult.length === 0 ? (
+                        <div>
+                            No friends was found
+                        </div>
+                    ) : (
+                        searchResult.map((result: SearchResult) => (
+                            <UserBox key={result.user.id} user={result.user} relation={result.relation} />
+                        ))
+                    ) }
                 </div>
             </div>
 

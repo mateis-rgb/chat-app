@@ -9,6 +9,7 @@ class SearchController extends Controller
     public function profile() {
         $users = DB::table("users")
             ->select("id", "name", "email", "email_verified_at", "created_at")
+            ->where("id", "!=", auth()->user()->id)
             ->get();
 
         $relations = DB::table("friendships")
