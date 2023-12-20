@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateAcquaintancesFriendshipTable extends Migration
 {
@@ -15,6 +16,7 @@ class CreateAcquaintancesFriendshipTable extends Migration
             $table->morphs('recipient');
             $table->string('status')->default('pending')->comment('pending/accepted/denied/blocked/');
             $table->timestamps();
+            $table->timestamp("read_at")->nullable();
         });
 
     }

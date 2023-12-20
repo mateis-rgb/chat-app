@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\FriendshipController;
+use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SearchController;
 use Illuminate\Foundation\Application;
@@ -42,6 +43,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/friends/{id}/remove', [FriendshipController::class, 'remove']);
     Route::get('/friends/{id}/accept', [FriendshipController::class, 'accept']);
     Route::get('/friends/{id}/deny', [FriendshipController::class, 'deny']);
+
+    Route::get('/notifications/get', [NotificationsController::class, "index"]);
+    Route::get('/notifications/clear', [NotificationsController::class, "clear"]);
 });
 
 Route::get('/friends/get', [FriendshipController::class, 'index']);

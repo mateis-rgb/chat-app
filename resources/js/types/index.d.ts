@@ -1,4 +1,5 @@
 export type RelationStatus = "pending" | "accepted" | "denied" | "blocked";
+export type UserStatus = "online" | "offline" | "isWriting";
 
 export interface User {
     id: number;
@@ -6,7 +7,7 @@ export interface User {
     email: string;
     email_verified_at: string;
     created_at: string;
-    status: string;
+    status: UserStatus;
 }
 
 export interface Relation {

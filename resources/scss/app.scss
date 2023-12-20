@@ -1,3 +1,6 @@
+@use "three-dots";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import "./typing-dots.scss";

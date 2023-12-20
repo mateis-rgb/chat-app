@@ -47,8 +47,8 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ auth }) => {
             const request = await fetch("/search/profile");
             const response = await request.json();
 
-            const usersList = response[0];
-            const relationsList = response[1];
+            const usersList: User[] = response[0];
+            const relationsList: Relation[] = response[1];
 
             const result: SearchResult[] = [];
 
