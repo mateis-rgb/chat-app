@@ -7,6 +7,7 @@ import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/react';
 import { AiOutlineBell } from "react-icons/ai";
+import NotificationsComponent from '@/Components/NotificationsComponent';
 
 export default function Authenticated({ user, header, children }: PropsWithChildren<{ user: User, header?: ReactNode }>) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
@@ -31,7 +32,12 @@ export default function Authenticated({ user, header, children }: PropsWithChild
                         </div>
 
                         <div className="hidden sm:flex sm:items-center sm:ms-6">
-                            <div className="ms-3 relative">
+                            <div className="ms-3 relative flex flex-row items-center">
+
+                            <Dropdown.Child>
+                                            <NotificationsComponent />
+                                        </Dropdown.Child>
+
                                 <Dropdown>
                                     <Dropdown.Trigger>
                                         <span className="inline-flex rounded-md">
@@ -63,17 +69,6 @@ export default function Authenticated({ user, header, children }: PropsWithChild
                                         </Dropdown.Link>
                                         <Dropdown.Link href={route('logout')} method="post" as="button">
                                             Log Out
-                                        </Dropdown.Link>
-                                    </Dropdown.Content>
-                                </Dropdown>
-
-                                <Dropdown>
-                                    <Dropdown.Trigger>
-                                        <AiOutlineBell className="w-5 h-5" />
-                                    </Dropdown.Trigger>
-                                    <Dropdown.Content>
-                                        <Dropdown.Link href='#'>
-                                            Toto
                                         </Dropdown.Link>
                                     </Dropdown.Content>
                                 </Dropdown>

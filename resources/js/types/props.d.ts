@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { User, Relation } from ".";
 
 export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
@@ -15,4 +16,9 @@ export type SearchComponentProps = {
     auth: {
         user: User
     }
+}
+
+export type DropdownChildProps = {
+    className?: string;
+    children: ReactNode;
 }
