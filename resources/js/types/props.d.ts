@@ -22,3 +22,7 @@ export type DropdownChildProps = {
     className?: string;
     children: ReactNode;
 }
+
+export type NotificationsComponentProps = {
+    className?: string;
+}

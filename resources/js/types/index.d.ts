@@ -1,6 +1,8 @@
 export type RelationStatus = "pending" | "accepted" | "denied" | "blocked";
 export type UserStatus = "online" | "offline" | "isWriting";
 
+export type NotificationType = "friend_request" | "unread_message";
+
 export interface User {
     id: number;
     name: string;
@@ -21,4 +23,10 @@ export interface Relation {
 export interface SearchResult {
     user: User;
     relation: Relation | null;
+}
+
+export interface Notifications {
+    id: number;
+    type: NotificationType;
+    content: string | null;
 }
