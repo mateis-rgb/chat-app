@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { Relation, SearchResult, User } from "@/types";
 import { SearchComponentProps } from "@/types/props";
 
-import InputLabel from "./InputLabel";
-import TextInput from "./TextInput";
-import InputError from "./InputError";
+import InputLabel from "../InputLabel";
+import TextInput from "../TextInput";
+import InputError from "../InputError";
 import UserBox from "./UserBox";
 
 const SearchComponent: React.FC<SearchComponentProps> = ({ auth }) => {

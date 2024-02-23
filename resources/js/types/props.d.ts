@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { User, Relation } from ".";
+import { User, Relation, Notifications } from ".";
 
 export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
     auth: {
@@ -25,4 +25,8 @@ export type DropdownChildProps = {
 
 export type NotificationsComponentProps = {
     className?: string;
+}
+export type NotificationsUserBoxProps = {
+    notification: Relation,
+    relation: Relation | null
 }

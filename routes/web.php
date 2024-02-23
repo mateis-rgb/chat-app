@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\FriendshipController;
 use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\ProfileController;
@@ -38,6 +39,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    // Conversations
+    Route::get("/conversation/{id}/", [ConversationController::class, "index"]);
+
     // Api
     Route::get('/friends/{id}/send', [FriendshipController::class, 'send']);
     Route::get('/friends/{id}/remove', [FriendshipController::class, 'remove']);
@@ -46,6 +50,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/notifications/get', [NotificationsController::class, "index"]);
     Route::get('/notifications/clear', [NotificationsController::class, "clear"]);
+
+    Route::post("/conversation/{id}/send", [ConversationController::class, "send"]);
 });
 
 Route::get('/friends/get', [FriendshipController::class, 'index']);

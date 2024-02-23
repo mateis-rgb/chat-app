@@ -1,4 +1,4 @@
-import { Notifications } from "@/types";
+import { Notifications, Relation } from "@/types";
 import { NotificationsComponentProps } from "@/types/props";
 
 import { Dropdown } from "flowbite-react";
@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { AiOutlineBell } from "react-icons/ai";
 
 const NotificationsComponent: React.FC<NotificationsComponentProps> = ({ className = "" }) => {
-    const [notifications, setNotifications] = useState<Notifications[]>([]);
+    const [notifications, setNotifications] = useState<Relation[]>([]);
     const [unreadNotifications, setUnreadNotifications] = useState(0);
 
     useEffect(() => {
@@ -14,7 +14,7 @@ const NotificationsComponent: React.FC<NotificationsComponentProps> = ({ classNa
             const request = await fetch("/notifications/get");
             const response = await request.json();
 
-            console.log(response);
+            setNotifications(response);
         }
 
         get();
@@ -29,15 +29,20 @@ const NotificationsComponent: React.FC<NotificationsComponentProps> = ({ classNa
             )}>
                 <Dropdown.Header>Vous avez {unreadNotifications} notifications en attente.</Dropdown.Header>
 
-                { notifications.map((notification: Notifications) => (
+                { notifications.map((notification: Relation) => (
                     <Dropdown.Item key={notification.id}>
-                        Coucou {notification.id}
+
                     </Dropdown.Item>
                 )) }
 
-                <Dropdown.Divider />
 
-                <Dropdown.Item onClick={handleClick}>Marquer les notifications comme lu</Dropdown.Item>
+                { notifications.length !== 0 && (
+                    <>
+                        <Dropdown.Divider />
+
+                        <Dropdown.Item onClick={handleClick}>Marquer les notifications comme lu</Dropdown.Item>
+                    </>
+                ) }
             </Dropdown>
         </div>
     );

@@ -6,7 +6,7 @@ import "react-initials-avatar/lib/ReactInitialsAvatar.css";
 import { useState } from "react";
 import clsx from "clsx";
 import { UserStatus } from "@/types";
-import TypingComponent from "./TypingComponent";
+import TypingComponent from "../TypingComponent";
 
 const UserBox: React.FC<UserBoxProps> = ({ user, relation }) => {
     const [isFollowedByUser, setIsFollowedByUser] = useState(relation?.sender_id === user.id);

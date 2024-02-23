@@ -6,7 +6,7 @@ import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/react';
 import { AiOutlineBell } from "react-icons/ai";
-import NotificationsComponent from '@/Components/NotificationsComponent';
+import NotificationsComponent from '@/Components/Notifications/NotificationsComponent';
 import { Dropdown } from 'flowbite-react';
 
 export default function Authenticated({ user, header, children }: PropsWithChildren<{ user: User, header?: ReactNode }>) {
@@ -43,7 +43,7 @@ export default function Authenticated({ user, header, children }: PropsWithChild
                                     </Dropdown.Item>
                                 </Dropdown>
 
-                                <NotificationsComponent className="pl-6" />
+                                <NotificationsComponent className="w-36 pl-6" />
                             </div>
                         </div>
 

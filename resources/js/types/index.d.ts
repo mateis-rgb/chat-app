@@ -14,10 +14,11 @@ export interface User {
 
 export interface Relation {
     id: number;
-    sender_id: number;
-    recipient_id: number;
+    sender: User;
+    recipient: User;
     status: RelationStatus;
     created_at: string;
+    read_at: string;
 }
 
 export interface SearchResult {

@@ -1,7 +1,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import { PageProps } from '@/types/props';
-import SearchComponent from '@/Components/SearchComponent';
+import SearchComponent from '@/Components/Search/SearchComponent';
 
 const Dashboard = ({ auth }: PageProps) => {
     return (
