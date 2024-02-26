@@ -3,6 +3,10 @@ export type UserStatus = "online" | "offline" | "isWriting";
 
 export type NotificationType = "friend_request" | "unread_message";
 
+export type SelectOption = { value: string, label: string };
+
+export type Auth = { user: User };
+
 export interface User {
     id: number;
     name: string;
@@ -26,8 +30,21 @@ export interface SearchResult {
     relation: Relation | null;
 }
 
-export interface Notifications {
+export interface Notification {
     id: number;
+    from: User;
+    to: User;
     type: NotificationType;
-    content: string | null;
+    content: string;
+    created_at: string;
+    updated_at: string | null;
+}
+
+export interface Message {
+    id: number;
+    sender: User;
+    recipient: User;
+    content: string;
+    created_at: string;
+    updated_at: string | null;
 }

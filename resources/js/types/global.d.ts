@@ -9,3 +9,7 @@ declare global {
     var route: typeof ziggyRoute;
     var Ziggy: ZiggyConfig;
 }
+
+export type ErrorTitle = { [key: number]: string };
+
+export type ErrorDescription = { [key: number]: string };

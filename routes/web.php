@@ -40,7 +40,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Conversations
-    Route::get("/conversation/{id}/", [ConversationController::class, "index"]);
+    Route::get("/conversation/new", [ConversationController::class, "new"])->name("conversation.new");
+    Route::get("/conversation/{id}/", [ConversationController::class, "index"])->name("conversation");
 
     // Api
     Route::get('/friends/{id}/send', [FriendshipController::class, 'send']);

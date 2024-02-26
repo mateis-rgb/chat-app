@@ -1,18 +1,20 @@
 import { UserBoxProps } from "@/types/props";
 import InitialsAvatar from "react-initials-avatar";
-import { AiOutlineUserAdd, AiOutlineUserDelete, AiOutlineMessage } from "react-icons/ai";
+import { AiOutlineUserAdd, AiOutlineUserDelete, AiOutlineMessage, AiOutlineClose } from "react-icons/ai";
 
 import "react-initials-avatar/lib/ReactInitialsAvatar.css";
 import { useState } from "react";
 import clsx from "clsx";
 import { UserStatus } from "@/types";
 import TypingComponent from "../TypingComponent";
+import IconButton from "../IconButton";
 
-const UserBox: React.FC<UserBoxProps> = ({ user, relation }) => {
-    const [isFollowedByUser, setIsFollowedByUser] = useState(relation?.sender_id === user.id);
-    const [isAlreadyFollowedByCurrentUser, setIsAlreadyFollowedByCurrentUser] = useState(relation?.recipient_id === user.id);
-    const [isLoading, setIsLoading] = useState(false);
+const UserBox: React.FC<UserBoxProps> = ({ auth, user, relation }) => {
+    const [isFollowedByUser, setIsFollowedByUser] = useState(relation?.sender.id === user.id);
+    const [isAlreadyFollowedByCurrentUser, setIsAlreadyFollowedByCurrentUser] = useState(relation?.recipient.id === user.id);
+    const [isPending, setIsPending] = useState(relation?.status === "pending");
     const [status, setStatus] = useState<UserStatus>("offline");
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleClick = async () => {
         setIsLoading(true);
@@ -22,6 +24,40 @@ const UserBox: React.FC<UserBoxProps> = ({ user, relation }) => {
 
         if (response.status === 200) {
             setIsAlreadyFollowedByCurrentUser(!isAlreadyFollowedByCurrentUser);
+
+            return;
+        }
+
+        setIsLoading(false);
+    }
+
+    const goMessages = () => {}
+
+    const handleDenyFriendRequest = async () => {
+        setIsLoading(true);
+
+        const request = await fetch(`/friends/${user.id}/deny`);
+        const response = await request.json();
+
+        if (response.status === 200) {
+            setIsAlreadyFollowedByCurrentUser(false);
+            setIsPending(true);
+
+            return;
+        }
+
+        setIsLoading(false);
+    }
+
+    const handleAcceptFriendRequest = async () => {
+        setIsLoading(true);
+
+        const request = await fetch(`/friends/${user.id}/accept`);
+        const response = await request.json();
+
+        if (response.status === 200) {
+            setIsAlreadyFollowedByCurrentUser(true);
+            setIsPending(false);
 
             return;
         }
@@ -68,38 +104,43 @@ const UserBox: React.FC<UserBoxProps> = ({ user, relation }) => {
                 </div>
             </div>
 
-            <div>
-                { isAlreadyFollowedByCurrentUser && (
+            <div className="flex lg:flex-row lg:gap-2 flex-col gap-1">
+                { isPending && isFollowedByUser ? (
+                    <>
+                        <IconButton
+                            type="button"
+                            color="green"
+                            disabled={isLoading}
+                            Icon={AiOutlineUserAdd}
+                            onClick={handleAcceptFriendRequest}
+                        />
 
-                    <button
-                        type="button"
-                        className={clsx(
-                            "h-12 w-12 mr-4 transition hover:text-white focus:ring-4 focus:outline-none font-medium rounded-full text-sm p-2.5 text-center inline-flex justify-center items-center dark:hover:text-white",
-                            "text-blue-700 border border-blue-700 focus:ring-blue-300 hover:bg-blue-700  dark:focus:ring-blue-800 dark:hover:bg-blue-500 dark:border-blue-500 dark:text-blue-500"
-                        )}
-                        disabled={isLoading}
-                    >
-                        <AiOutlineMessage className="h-6 w-6" />
-                    </button>
-                ) }
+                        <IconButton
+                            type="button"
+                            color="red"
+                            disabled={isLoading}
+                            Icon={AiOutlineClose}
+                            onClick={handleDenyFriendRequest}
+                        />
+                    </>
+                ) : (
+                    <>
+                        <IconButton
+                            type="button"
+                            onClick={goMessages}
+                            disabled={isLoading}
+                            Icon={AiOutlineMessage}
+                        />
 
-                <button
-                    type="button"
-                    className={clsx(
-                        "h-12 w-12 transition hover:text-white focus:ring-4 focus:outline-none font-medium rounded-full text-sm p-2.5 text-center inline-flex justify-center items-center dark:hover:text-white",
-                        isAlreadyFollowedByCurrentUser ?
-                            "text-red-700 border border-red-700 focus:ring-red-300 hover:bg-red-700  dark:focus:ring-red-800 dark:hover:bg-red-500 dark:border-red-500 dark:text-red-500" :
-                            "text-blue-700 border border-blue-700 focus:ring-blue-300 hover:bg-blue-700  dark:focus:ring-blue-800 dark:hover:bg-blue-500 dark:border-blue-500 dark:text-blue-500"
-                    )}
-                    onClick={handleClick}
-                    disabled={isLoading}
-                >
-                    { isAlreadyFollowedByCurrentUser ? (
-                        <AiOutlineUserDelete className="h-6 w-6" />
-                    ) : (
-                        <AiOutlineUserAdd className="h-6 w-6" />
-                    ) }
-                </button>
+                        <IconButton
+                            type="button"
+                            color={isAlreadyFollowedByCurrentUser ? "red" : ""}
+                            onClick={handleClick}
+                            disabled={isLoading}
+                            Icon={AiOutlineUserDelete}
+                        />
+                    </>
+                )}
             </div>
         </div>
     );

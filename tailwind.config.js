@@ -9,6 +9,7 @@ export default {
         './resources/views/**/*.blade.php',
         './resources/js/**/*.tsx',
         'node_modules/flowbite-react/lib/esm/**/*.js',
+        "./node_modules/react-tailwindcss-select/dist/index.esm.js"
     ],
 
     theme: {

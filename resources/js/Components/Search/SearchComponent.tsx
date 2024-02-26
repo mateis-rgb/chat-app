@@ -17,30 +17,26 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ auth }) => {
             const request = await fetch("/search/profile");
             const response = await request.json();
 
-            const usersList: User[] = response[0];
             const relationsList: Relation[] = response[1];
 
-            const result: SearchResult[] = [];
+            const searchList: SearchResult[] = [];
 
-            usersList.forEach((user: User) => {
-                if (relationsList.length !== 0) {
-                    relationsList.forEach((relation: Relation) => {
-                        if (relation.recipient_id === user.id) {
-                            result.push({
-                                user: user,
-                                relation: relation
-                            });
-                        }
+            relationsList.map((relation: Relation) => {
+                if (relation.recipient.id === auth.user.id || relation.sender.id === auth.user.id) {
+                    searchList.push({
+                        user: relation.recipient.id === auth.user.id ? relation.sender : relation.recipient,
+                        relation: relation
                     });
                 }
             });
 
-            setSearchResult(result);
+            setSearchResult(searchList);
         })();
     }, []);
 
     const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
+
         setSearchInput(e.target.value);
 
         if (e.target.value.length !== 0) {
@@ -53,28 +49,30 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ auth }) => {
             const result: SearchResult[] = [];
 
             usersList.forEach((user: User) => {
-                if (user.name.toLowerCase().includes(e.target.value) || user.email.toLowerCase().includes(e.target.value)) {
-                    if (relationsList.length !== 0) {
-                        relationsList.forEach((relation: Relation) => {
-                            if ((user.id === relation.recipient_id && auth.user.id === relation.sender_id) || (user.id === relation.sender_id && auth.user.id === relation.recipient_id)) {
-                                result.push({
-                                    user: user,
-                                    relation: relation
-                                });
-                            }
-                            else {
-                                result.push({
-                                    user: user,
-                                    relation: null
-                                });
-                            }
-                        });
-                    }
-                    else {
-                        result.push({
-                            user: user,
-                            relation: null
-                        });
+                if (user.id !== auth.user.id) {
+                    if (user.name.toLowerCase().includes(e.target.value) || user.email.toLowerCase().includes(e.target.value)) {
+                        if (relationsList.length !== 0) {
+                            relationsList.forEach((relation: Relation) => {
+                                if ((user.id === relation.recipient.id && auth.user.id === relation.sender.id) || (user.id === relation.sender.id && auth.user.id === relation.recipient.id)) {
+                                    result.push({
+                                        user: user,
+                                        relation: relation
+                                    });
+                                }
+                                else {
+                                    result.push({
+                                        user: user,
+                                        relation: null
+                                    });
+                                }
+                            });
+                        }
+                        else {
+                            result.push({
+                                user: user,
+                                relation: null
+                            });
+                        }
                     }
                 }
             });
@@ -111,7 +109,7 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ auth }) => {
                         </div>
                     ) : (
                         searchResult.map((result: SearchResult) => (
-                            <UserBox key={result.user.id} user={result.user} relation={result.relation} />
+                            <UserBox key={result.user.id} auth={auth} user={result.user} relation={result.relation} />
                         ))
                     ) }
                 </div>

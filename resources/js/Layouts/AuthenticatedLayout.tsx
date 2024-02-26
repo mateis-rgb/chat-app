@@ -1,15 +1,14 @@
 import { useState, PropsWithChildren, ReactNode } from 'react';
-import { User } from '@/types';
+import { Auth } from '@/types';
 
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/react';
-import { AiOutlineBell } from "react-icons/ai";
 import NotificationsComponent from '@/Components/Notifications/NotificationsComponent';
 import { Dropdown } from 'flowbite-react';
 
-export default function Authenticated({ user, header, children }: PropsWithChildren<{ user: User, header?: ReactNode }>) {
+export default function Authenticated({ auth, header, children }: PropsWithChildren<{ auth: Auth, header?: ReactNode }>) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
     return (
@@ -28,17 +27,21 @@ export default function Authenticated({ user, header, children }: PropsWithChild
                                 <NavLink href={route('dashboard')} active={route().current('dashboard')}>
                                     Dashboard
                                 </NavLink>
+
+                                <NavLink href={route('conversation.new')} active={route().current('conversation.new')}>
+                                    Nouvelle Conversation
+                                </NavLink>
                             </div>
                         </div>
 
                         <div className="hidden sm:flex sm:items-center sm:ms-6">
                             <div className="ms-3 relative flex flex-row items-center">
-                                <Dropdown inline label={user.name}>
+                                <Dropdown inline label={auth.user.name}>
                                     <Dropdown.Item as={Link} href={route("profile.edit")}>
                                         Profile
                                     </Dropdown.Item>
 
-                                    <Dropdown.Item as={Link} href={route("profile.edit")}>
+                                    <Dropdown.Item method="post" href={route('logout')} as={Link}>
                                         Log Out
                                     </Dropdown.Item>
                                 </Dropdown>
@@ -78,14 +81,18 @@ export default function Authenticated({ user, header, children }: PropsWithChild
                         <ResponsiveNavLink href={route('dashboard')} active={route().current('dashboard')}>
                             Dashboard
                         </ResponsiveNavLink>
+
+                        <ResponsiveNavLink href={route('conversation.new')} active={route().current('conversation.new')}>
+                            Nouvelle Conversation
+                        </ResponsiveNavLink>
                     </div>
 
                     <div className="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
                         <div className="px-4">
                             <div className="font-medium text-base text-gray-800 dark:text-gray-200">
-                                {user.name}
+                                {auth.user.name}
                             </div>
-                            <div className="font-medium text-sm text-gray-500">{user.email}</div>
+                            <div className="font-medium text-sm text-gray-500">{auth.user.email}</div>
                         </div>
 
                         <div className="mt-3 space-y-1">
