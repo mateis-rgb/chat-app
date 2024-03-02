@@ -2,17 +2,53 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
+use App\Models\User;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Redirect;
+use App\Http\Requests\ProfileUpdateRequest;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 class ProfileController extends Controller
 {
+    public function index (int $id) {
+        if ($id === auth()->user()->id) {
+            return to_route("error", ["status" => 401]);
+        }
+
+        $relations = [];
+
+        $user = User::find($id);
+        $users = DB::table("users")
+            ->select("id", "name", "email", "email_verified_at", "created_at", "status")
+            ->get();
+
+        $request_relations = DB::table("friendships")
+            ->select("id", "sender_id", "recipient_id", "status", "created_at")
+            ->whereRaw("recipient_id = ? OR sender_id = ?", [$user->id, $user->id])
+            ->where("status", "accepted")
+            ->get();
+
+        foreach ($request_relations as $relation) {
+            array_push($relations, [
+                "id" => $relation->id,
+                "sender" => $users[$relation->sender_id - 1],
+                "recipient" => $users[$relation->recipient_id - 1],
+                "status" => $relation->status,
+                "created_at" => $relation->created_at
+            ]);
+        }
+
+        return Inertia::render("Profile/Index", [
+            "user" => $user,
+            "relations" => $relations
+        ]);
+    }
+
     /**
      * Display the user's profile form.
      */
@@ -38,6 +74,14 @@ class ProfileController extends Controller
         $request->user()->save();
 
         return Redirect::route('profile.edit');
+    }
+
+    public function updatePreferences(Request $request) {
+        DB::table("users")
+            ->where("id", auth()->user()->id)
+            ->update(["share_profiles" => $request->share_profiles]);
+
+        return Redirect::route("profile.edit");
     }
 
     /**

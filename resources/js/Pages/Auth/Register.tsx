@@ -5,6 +5,7 @@ import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Head, Link, useForm } from '@inertiajs/react';
+import Checkbox from '@/Components/Checkbox';
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -12,6 +13,8 @@ export default function Register() {
         email: '',
         password: '',
         password_confirmation: '',
+        cgu: false,
+        share_profiles: false
     });
 
     useEffect(() => {
@@ -97,6 +100,28 @@ export default function Register() {
                     />
 
                     <InputError message={errors.password_confirmation} className="mt-2" />
+                </div>
+
+                <div className="block mt-4">
+                    <label className="flex items-center">
+                        <Checkbox
+                            name="remember"
+                            checked={data.cgu}
+                            onChange={(e) => setData('cgu', e.target.checked)}
+                        />
+                        <span className="ms-2 text-sm text-gray-600 dark:text-gray-400">J'accepte les conditions d'utilisations.</span>
+                    </label>
+                </div>
+
+                <div className="block mt-4">
+                    <label className="flex items-center">
+                        <Checkbox
+                            name="remember"
+                            checked={data.share_profiles}
+                            onChange={(e) => setData('share_profiles', e.target.checked)}
+                        />
+                        <span className="ms-2 text-sm text-gray-600 dark:text-gray-400">J'accepte de partager les profiles utilisateurs lié a mon compte.</span>
+                    </label>
                 </div>
 
                 <div className="flex items-center justify-end mt-4">

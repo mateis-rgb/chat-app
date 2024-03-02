@@ -18,6 +18,8 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string("status")->default("offline")->comment('online/offline/');
             $table->string('password');
+            $table->boolean("cgu")->default(false);
+            $table->boolean("share_profiles")->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

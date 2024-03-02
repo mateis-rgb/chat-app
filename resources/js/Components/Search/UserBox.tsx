@@ -1,13 +1,15 @@
+import clsx from "clsx";
 import { UserBoxProps } from "@/types/props";
+import { useState } from "react";
+import { UserStatus } from "@/types";
+
 import InitialsAvatar from "react-initials-avatar";
 import { AiOutlineUserAdd, AiOutlineUserDelete, AiOutlineMessage, AiOutlineClose } from "react-icons/ai";
-
-import "react-initials-avatar/lib/ReactInitialsAvatar.css";
-import { useState } from "react";
-import clsx from "clsx";
-import { UserStatus } from "@/types";
 import TypingComponent from "../TypingComponent";
 import IconButton from "../IconButton";
+import { Link } from "@inertiajs/react";
+
+import "react-initials-avatar/lib/ReactInitialsAvatar.css";
 
 const UserBox: React.FC<UserBoxProps> = ({ auth, user, relation }) => {
     const [isFollowedByUser, setIsFollowedByUser] = useState(relation?.sender.id === user.id);
@@ -30,8 +32,6 @@ const UserBox: React.FC<UserBoxProps> = ({ auth, user, relation }) => {
 
         setIsLoading(false);
     }
-
-    const goMessages = () => {}
 
     const handleDenyFriendRequest = async () => {
         setIsLoading(true);
@@ -69,7 +69,10 @@ const UserBox: React.FC<UserBoxProps> = ({ auth, user, relation }) => {
         <div className="flex flex-row justify-between mt-4 p-6 bg-gray-50 hover:bg-gray-100 transition dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div className="flex flex-row justify-start relative me-4">
                 <div className="mr-4">
-                    <InitialsAvatar name={user.name} />
+                    <Link href={route("profile.index", user.id)}>
+                        <InitialsAvatar name={user.name} />
+                    </Link>
+
                     { status === "isWriting" ? (
                         <div className="absolute top-0 start-8">
                             <TypingComponent />
@@ -104,7 +107,7 @@ const UserBox: React.FC<UserBoxProps> = ({ auth, user, relation }) => {
                 </div>
             </div>
 
-            <div className="flex lg:flex-row lg:gap-2 flex-col gap-1">
+            <div className="flex lg:flex-row lg:gap-2 flex-col items-center gap-1">
                 { isPending && isFollowedByUser ? (
                     <>
                         <IconButton
@@ -125,12 +128,13 @@ const UserBox: React.FC<UserBoxProps> = ({ auth, user, relation }) => {
                     </>
                 ) : (
                     <>
-                        <IconButton
-                            type="button"
-                            onClick={goMessages}
-                            disabled={isLoading}
-                            Icon={AiOutlineMessage}
-                        />
+                        <Link href={route("conversation.index", user.id)} as="button">
+                            <IconButton
+                                type="button"
+                                disabled={isLoading}
+                                Icon={AiOutlineMessage}
+                            />
+                        </Link>
 
                         <IconButton
                             type="button"

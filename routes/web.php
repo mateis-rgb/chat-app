@@ -29,6 +29,10 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get("/error/{status}", function ($status) {
+    return Inertia::render("ErrorPage", ["status" => $status]);
+})->name("error");
+
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -36,12 +40,14 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
     // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile/{id}', [ProfileController::class, 'index'])->name('profile.index');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post("/profile", [ProfileController::class, "updatePreferences"])->name("profile.updatePref");
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Conversations
-    Route::get("/conversation/new", [ConversationController::class, "new"])->name("conversation.new");
-    Route::get("/conversation/{id}/", [ConversationController::class, "index"])->name("conversation");
+    Route::get("/conversation/{id}/", [ConversationController::class, "index"])->name("conversation.index");
+    Route::post("/conversation/{id}/", [ConversationController::class, "send"])->name("conversation.send");
 
     // Api
     Route::get('/friends/{id}/send', [FriendshipController::class, 'send']);
@@ -51,8 +57,6 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/notifications/get', [NotificationsController::class, "index"]);
     Route::get('/notifications/clear', [NotificationsController::class, "clear"]);
-
-    Route::post("/conversation/{id}/send", [ConversationController::class, "send"]);
 });
 
 Route::get('/friends/get', [FriendshipController::class, 'index']);

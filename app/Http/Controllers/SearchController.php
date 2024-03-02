@@ -10,7 +10,7 @@ class SearchController extends Controller
         $relations = [];
 
         $users = DB::table("users")
-            ->select("id", "name", "email", "email_verified_at", "created_at")
+            ->select("id", "name", "email", "email_verified_at", "created_at", "status")
             ->get();
 
         $request_relation = DB::table("friendships")

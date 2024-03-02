@@ -4,12 +4,16 @@ import { Auth } from '@/types';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
-import { Link } from '@inertiajs/react';
+import { Link, router } from '@inertiajs/react';
 import NotificationsComponent from '@/Components/Notifications/NotificationsComponent';
 import { Dropdown } from 'flowbite-react';
+import NProgress from "nprogress";
 
 export default function Authenticated({ auth, header, children }: PropsWithChildren<{ auth: Auth, header?: ReactNode }>) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
+
+    router.on("start", () => NProgress.start());
+    router.on("finish", () => NProgress.done());
 
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -26,10 +30,6 @@ export default function Authenticated({ auth, header, children }: PropsWithChild
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink href={route('dashboard')} active={route().current('dashboard')}>
                                     Dashboard
-                                </NavLink>
-
-                                <NavLink href={route('conversation.new')} active={route().current('conversation.new')}>
-                                    Nouvelle Conversation
                                 </NavLink>
                             </div>
                         </div>
@@ -80,10 +80,6 @@ export default function Authenticated({ auth, header, children }: PropsWithChild
                     <div className="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink href={route('dashboard')} active={route().current('dashboard')}>
                             Dashboard
-                        </ResponsiveNavLink>
-
-                        <ResponsiveNavLink href={route('conversation.new')} active={route().current('conversation.new')}>
-                            Nouvelle Conversation
                         </ResponsiveNavLink>
                     </div>
 

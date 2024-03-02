@@ -14,6 +14,7 @@ class NotificationRepository {
         $req_notifications = DB::table("notifications")
             ->where("to_id", $to_id)
             ->where("updated_at", null)
+            ->orderBy("created_at", "desc")
             ->get();
 
         foreach ($req_notifications as $notification) {

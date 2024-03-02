@@ -1,24 +1,20 @@
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import { Link, useForm, usePage } from '@inertiajs/react';
-import { Transition } from '@headlessui/react';
-import { FormEventHandler } from 'react';
-import { PageProps } from '@/types/props';
+import InputError from "@/Components/InputError";
+import InputLabel from "@/Components/InputLabel";
+import TextInput from "@/Components/TextInput";
+import { SocialMedia } from "@/types";
+import { UpdateSocialMediasProps } from "@/types/props";
+import { useForm } from "@inertiajs/react";
+import { FormEventHandler } from "react";
 
-export default function UpdateProfileInformation({ mustVerifyEmail, status, className = '' }: { mustVerifyEmail: boolean, status?: string, className?: string }) {
-    const user = usePage<PageProps>().props.auth.user;
-
-    const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
-        name: user.name,
-        email: user.email,
+const UpdateSocialMedias: React.FC<UpdateSocialMediasProps> = ({ auth, social_medias, status, mustVerifyEmail, className }) => {
+    const { data, setData, post, errors, processing, recentlySuccessful } = useForm({
+        social_medias: social_medias
     });
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
-        patch(route('profile.update'));
+        // post(route('profile.update'));
     };
 
     return (
@@ -32,37 +28,34 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
             </header>
 
             <form onSubmit={submit} className="mt-6 space-y-6">
-                <div>
-                    <InputLabel htmlFor="name" value="Name" />
+                {social_medias.map((social_media: SocialMedia, index: number) => (
+                    <div>
+                        <InputLabel htmlFor="name" value="Nom du réseau social" />
 
-                    <TextInput
-                        id="name"
-                        className="mt-1 block w-full"
-                        value={data.name}
-                        onChange={(e) => setData('name', e.target.value)}
-                        required
-                        isFocused
-                        autoComplete="name"
-                    />
+                        <TextInput
+                            id="name"
+                            className="mt-1 block w-full"
+                            value={data.social_medias[index].name}
+                            onChange={(e) => setData('social_medias', e.target.value)}
+                            required
+                            isFocused
+                            autoComplete="name"
+                        />
 
-                    <InputError className="mt-2" message={errors.name} />
-                </div>
+                        <TextInput
+                            id="name"
+                            className="mt-1 block w-full"
+                            value={data.social_medias[index].identifier}
+                            onChange={(e) => setData('name', e.target.value)}
+                            required
+                            isFocused
+                            autoComplete="name"
+                        />
 
-                <div>
-                    <InputLabel htmlFor="email" value="Email" />
+                        <InputError className="mt-2" message={errors.name} />
+                    </div>
+                ))}
 
-                    <TextInput
-                        id="email"
-                        type="email"
-                        className="mt-1 block w-full"
-                        value={data.email}
-                        onChange={(e) => setData('email', e.target.value)}
-                        required
-                        autoComplete="username"
-                    />
-
-                    <InputError className="mt-2" message={errors.email} />
-                </div>
 
                 {mustVerifyEmail && user.email_verified_at === null && (
                     <div>
@@ -103,3 +96,5 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
         </section>
     );
 }
+
+export default UpdateSocialMedias;

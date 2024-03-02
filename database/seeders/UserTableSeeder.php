@@ -18,6 +18,7 @@ class UserTableSeeder extends Seeder
                 "name" => "John Doe $i",
                 "email" => "john$i@doe.fr",
                 "password" => bcrypt("0000"),
+                "cgu" => true,
                 "created_at" => Carbon::now()
             ]);
         }
